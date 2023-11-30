@@ -1,0 +1,15 @@
+- name:  /etc/zabbix privilegies
+  hosts: gww5d36
+  
+  tasks:
+    - name: chown +x /etc/zabbix/*
+      #file: path=/etc/zabbix/*.* owner=root group=root
+      ansible.builtin.file:
+        path: /etc/zabbix
+        state: directory
+        recurse: yes
+        owner: root
+        group: root
+
+    - name: chmod +x /etc/zabbix/zabbix_proc.sh
+      file: path=/etc/zabbix/zabbix_proc.sh owner=zabbix group=zabbix

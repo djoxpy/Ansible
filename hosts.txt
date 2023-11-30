@@ -1,0 +1,356 @@
+gww5zbx	ansible_host=123.45.48.59	ansible_user=root
+gww5g1	ansible_host=123.45.48.57	ansible_user=root
+gww5t1	ansible_host=123.45.48.62	ansible_user=root
+gww5t2	ansible_host=123.45.48.160	ansible_user=root
+
+
+
+###GWW1###
+
+[gww1_p]
+gww1p1	ansible_host=123.45.0.133
+gww1p2	ansible_host=123.45.0.134
+gww1p3	ansible_host=123.45.0.136
+gww1p4	ansible_host=123.45.0.137
+#gww1p5	ansible_host=123.45.0.138 --> transer to gww6d6
+#gww1p6	ansible_host=123.45.0.139 --> transer to gww6d7
+gww1p7	ansible_host=123.45.0.167
+
+[gww1_db]
+gww1d7	ansible_host=123.45.0.141
+gww1d8	ansible_host=123.45.0.168
+gww1d9	ansible_host=123.45.0.169
+gww1d10	ansible_host=123.45.0.170
+gww1d11	ansible_host=123.45.0.171
+gww1d12	ansible_host=123.45.0.172
+gww1d13	ansible_host=123.45.0.173
+gww1d14	ansible_host=123.45.0.174
+
+[gww1:children]
+gww1_p
+gww1_db
+
+
+
+###GWW5###
+
+[gww5_p]
+gww5p1	ansible_host=123.45.48.5
+gww5p2	ansible_host=123.45.48.6
+gww5p3	ansible_host=123.45.48.7
+gww5p4	ansible_host=123.45.48.8
+gww5p5	ansible_host=123.45.48.9
+gww5p8	ansible_host=123.45.48.12
+gww5p9	ansible_host=123.45.48.13
+gww5p10	ansible_host=123.45.48.14
+
+[gww5_db]
+gww5d1	ansible_host=123.45.48.33
+gww5d2	ansible_host=123.45.48.34
+gww5d3	ansible_host=123.45.48.35
+gww5d4	ansible_host=123.45.48.36
+gww5d5	ansible_host=123.45.48.37
+gww5d6	ansible_host=123.45.48.38
+gww5d7	ansible_host=123.45.48.39
+gww5d8	ansible_host=123.45.48.40
+gww5d9	ansible_host=123.45.48.41
+gww5d10	ansible_host=123.45.48.42
+gww5d12	ansible_host=123.45.48.44
+gww5d13	ansible_host=123.45.48.45
+gww5d14	ansible_host=123.45.48.46
+gww5d15	ansible_host=123.45.48.47
+gww5d16	ansible_host=123.45.48.48
+gww5d18	ansible_host=123.45.48.50
+gww5d19	ansible_host=123.45.48.51
+gww5d20	ansible_host=123.45.48.52
+gww5d23	ansible_host=123.45.48.55
+gww5d24	ansible_host=123.45.48.21
+gww5d25	ansible_host=123.45.48.22
+gww5d26	ansible_host=123.45.48.23
+gww5d27	ansible_host=123.45.48.24
+gww5d28	ansible_host=123.45.48.25
+gww5d29	ansible_host=123.45.48.26
+gww5d30	ansible_host=123.45.48.27
+gww5d31	ansible_host=123.45.48.28
+gww5d34	ansible_host=123.45.48.31
+gww5d36	ansible_host=123.45.56.197
+gww5d37	ansible_host=123.45.56.198
+gww5d38	ansible_host=123.45.56.199
+gww5d39	ansible_host=123.45.56.200
+gww5d40	ansible_host=123.45.56.201
+gww5d41	ansible_host=123.45.56.202
+gww5d42	ansible_host=123.45.56.203
+gww5d43	ansible_host=123.45.56.204
+gww5d44	ansible_host=123.45.56.205
+gww5d46 ansible_host=123.45.56.207 #NEW
+gww5d47	ansible_host=123.45.56.208 #NEW
+gww5d48	ansible_host=123.45.56.209 #NEW
+gww5d49	ansible_host=123.45.56.210
+gww5d50	ansible_host=123.45.56.211	
+gww5d51	ansible_host=123.45.56.212 #NEW
+gww5d52	ansible_host=123.45.56.213 #NEW
+gww5d53	ansible_host=123.45.56.214
+gww5d54	ansible_host=123.45.56.215
+gww5d55	ansible_host=123.45.48.10
+gww5d56	ansible_host=123.45.48.11
+
+[gww5_up]
+gww5up3	ansible_host=123.45.48.135
+gww5up4	ansible_host=123.45.48.136
+gww5up5	ansible_host=123.45.48.137
+gww5up6	ansible_host=123.45.48.138
+gww5up7	ansible_host=123.45.48.139 #NEW
+gww5up8	ansible_host=123.45.48.140 #NEW
+
+
+
+[gww5:children]
+gww5_p
+gww5_db
+gww5_up
+
+
+
+###GPP2###
+
+[gpp2_p]
+gpp2p1	ansible_host=123.45.164.69
+gpp2p2	ansible_host=123.45.164.70
+
+[gpp2_up]
+gpp2up1	ansible_host=123.45.164.72
+gpp2up2	ansible_host=123.45.164.73
+gpp2up3 ansible_host=123.45.164.74 #NEW
+
+[gpp2_db]
+gpp2d1	ansible_host=123.45.164.97
+gpp2d2	ansible_host=123.45.164.98
+gpp2d3	ansible_host=123.45.164.99
+gpp2d4	ansible_host=123.45.164.100
+gpp2d5	ansible_host=123.45.164.101
+gpp2d6	ansible_host=123.45.164.102
+gpp2d7	ansible_host=123.45.164.103
+gpp2d8	ansible_host=123.45.164.104
+gpp2d9	ansible_host=123.45.164.105 #NEW
+gpp2d10	ansible_host=123.45.164.106 #NEW
+gpp2d11	ansible_host=123.45.164.107 #NEW
+
+[gpp2:children]
+gpp2_p
+gpp2_db
+gpp2_up
+
+
+
+###GPP4###
+
+[gpp4_p]
+gpp4p1	ansible_host=123.45.148.69
+gpp4p2	ansible_host=123.45.148.70
+
+[gpp4_up]
+gpp4up1	ansible_host=123.45.148.71
+gpp4up2	ansible_host=123.45.148.72
+
+[gpp4_db]
+gpp4d1	ansible_host=123.45.148.97
+gpp4d2	ansible_host=123.45.148.98
+gpp4d3	ansible_host=123.45.148.99
+gpp4d4	ansible_host=123.45.148.100
+gpp4d5	ansible_host=123.45.148.101
+gpp4d6	ansible_host=123.45.148.102
+gpp4d7	ansible_host=123.45.148.103
+gpp4d8	ansible_host=123.45.148.104
+gpp4d9	ansible_host=123.45.148.105
+gpp4d10	ansible_host=123.45.148.106
+gpp4d11	ansible_host=123.45.148.107
+gpp4d12	ansible_host=123.45.148.108
+gpp4d13	ansible_host=123.45.148.109 #NEW
+gpp4d14	ansible_host=123.45.148.110 #NEW
+
+[gpp4:children]
+gpp4_p
+gpp4_db
+gpp4_up
+
+
+
+###GKK1###
+
+[gkk1_p]
+gkk1p1	ansible_host=123.45.81.69
+gkk1p2	ansible_host=123.45.81.70
+gkk1p3	ansible_host=123.45.81.71
+gkk1p4	ansible_host=123.45.81.72
+gkk1p5	ansible_host=123.45.81.113 #NEW
+gkk1p6	ansible_host=123.45.81.76
+gkk1p7	ansible_host=123.45.81.77
+gkk1p9	ansible_host=123.45.81.73
+
+[gkk1_up]
+gkk1up1	ansible_host=123.45.81.74
+gkk1up2	ansible_host=123.45.81.75
+
+[gkk1_db]
+gkk1d1	ansible_host=123.45.81.97 #NEW
+gkk1d2	ansible_host=123.45.81.98
+gkk1d3	ansible_host=123.45.81.99
+gkk1d4	ansible_host=123.45.81.100
+gkk1d5	ansible_host=123.45.81.101
+gkk1d6	ansible_host=123.45.81.102
+gkk1d7	ansible_host=123.45.81.103
+gkk1d8	ansible_host=123.45.81.104
+gkk1d9	ansible_host=123.45.81.105
+gkk1d10	ansible_host=123.45.81.106
+gkk1d11	ansible_host=123.45.81.107
+gkk1d12	ansible_host=123.45.81.108
+gkk1d13	ansible_host=123.45.81.109
+gkk1d14	ansible_host=123.45.81.110
+gkk1d15	ansible_host=123.45.81.111
+gkk1d16	ansible_host=123.45.81.112
+gkk1d18	ansible_host=123.45.81.114 #NEW
+gkk1d19	ansible_host=123.45.81.115 #NEW
+gkk1d20	ansible_host=123.45.81.116
+gkk1d21	ansible_host=123.45.81.117
+gkk1d22	ansible_host=123.45.81.118
+gkk1d23	ansible_host=123.45.81.119
+gkk1d24	ansible_host=123.45.81.120
+gkk1d25	ansible_host=123.45.81.121 #NEW
+gkk1d26	ansible_host=123.45.81.122
+gkk1d27	ansible_host=123.45.81.123
+gkk1d28	ansible_host=123.45.81.124
+gkk1d29	ansible_host=123.45.81.125
+gkk1d30	ansible_host=123.45.81.126
+gkk1d31	ansible_host=123.45.81.95
+gkk1d32	ansible_host=123.45.81.96
+
+[gkk1:children]
+gkk1_p
+gkk1_db
+gkk1_up
+
+
+
+###GKK2###
+
+[gkk2_p]
+gkk2p1	ansible_host=123.45.102.133
+gkk2p2	ansible_host=123.45.102.134
+gkk2p3	ansible_host=123.45.102.137
+gkk2p4	ansible_host=123.45.102.138
+
+[gkk2_up]
+gkk2up1	ansible_host=123.45.102.135
+gkk2up2	ansible_host=123.45.102.136
+gkk2up3	ansible_host=123.45.102.139
+gkk2up4	ansible_host=123.45.102.140
+gkk2up5 ansible_host=123.45.102.141 #NEW
+
+[gkk2_db]
+gkk2d1	ansible_host=123.45.102.161
+gkk2d2	ansible_host=123.45.102.162
+gkk2d3	ansible_host=123.45.102.163
+gkk2d4	ansible_host=123.45.102.164
+gkk2d5	ansible_host=123.45.102.165
+gkk2d6	ansible_host=123.45.102.166
+gkk2d7	ansible_host=123.45.102.167
+gkk2d8	ansible_host=123.45.102.168
+gkk2d9	ansible_host=123.45.102.169
+gkk2d10	ansible_host=123.45.102.170
+gkk2d11	ansible_host=123.45.102.171
+gkk2d12	ansible_host=123.45.102.172
+gkk2d13	ansible_host=123.45.102.173
+gkk2d14	ansible_host=123.45.102.174
+gkk2d15	ansible_host=123.45.102.175
+gkk2d16	ansible_host=123.45.102.176
+gkk2d17	ansible_host=123.45.102.177
+gkk2d18	ansible_host=123.45.102.178
+gkk2d19	ansible_host=123.45.102.179
+gkk2d20	ansible_host=123.45.102.137 #NEW
+gkk2d21	ansible_host=123.45.102.180 #NEW
+gkk2d22	ansible_host=123.45.102.181 #NEW
+gkk2d23	ansible_host=123.45.102.182 #NEW
+gkk2d24	ansible_host=123.45.102.183 #NEW
+gkk2d25	ansible_host=123.45.102.184 #NEW
+
+
+[gkk2:children]
+gkk2_p
+gkk2_db
+gkk2_up
+
+
+
+###GWW6###
+
+[gww6_p]
+gww6p1	ansible_host=123.55.20.97
+gww6p4	ansible_host=123.55.20.100
+gww6p8	ansible_host=123.55.20.107 #NEW
+
+[gww6_up]
+gww6up1	ansible_host=123.55.20.69
+gww6up2	ansible_host=123.55.20.70
+gww6up3	ansible_host=123.55.20.105 #NEW
+gww6up4	ansible_host=123.55.20.106 #NEW
+
+
+[gww6_db]
+gww6d2	ansible_host=123.55.20.98
+gww6d3	ansible_host=123.55.20.99
+gww6d4	ansible_host=123.55.20.101
+gww6d5	ansible_host=123.55.20.102
+gww6d6	ansible_host=123.55.20.103
+gww6d7	ansible_host=123.55.20.104
+gww6d9	ansible_host=123.55.20.108 #NEW
+gww6d10	ansible_host=123.55.20.109 #NEW
+
+
+[gww6:children]
+gww6_p
+gww6_db
+gww6_up
+
+
+
+###GUP###
+
+[gup]
+gup1	ansible_host=123.65.0.197
+gup2	ansible_host=123.65.32.197
+
+
+
+###NEW_SERVERS###
+
+[new]
+gww5d46 ansible_host=123.45.56.207 #NEW
+gww5d47	ansible_host=123.45.56.208 #NEW
+gww5d48	ansible_host=123.45.56.209 #NEW
+gww5d51	ansible_host=123.45.56.212 #NEW
+gww5d52	ansible_host=123.45.56.213 #NEW
+gww5up7	ansible_host=123.45.48.139 #NEW
+gww5up8	ansible_host=123.45.48.140 #NEW
+gpp2up3 ansible_host=123.45.164.74 #NEW
+gpp2d9	ansible_host=123.45.164.105 #NEW
+gpp2d10	ansible_host=123.45.164.106 #NEW
+gpp2d11	ansible_host=123.45.164.107 #NEW
+gpp4d13	ansible_host=123.45.148.109 #NEW
+gpp4d14	ansible_host=123.45.148.110 #NEW
+gkk1p5	ansible_host=123.45.81.113 #NEW
+gkk1d1	ansible_host=123.45.81.97 #NEW
+gkk1d18	ansible_host=123.45.81.114 #NEW
+gkk1d19	ansible_host=123.45.81.115 #NEW
+gkk1d25	ansible_host=123.45.81.121 #NEW
+gkk2up5 ansible_host=123.45.102.141 #NEW
+gkk2d20	ansible_host=123.45.102.137 #NEW
+gkk2d21	ansible_host=123.45.102.180 #NEW
+gkk2d22	ansible_host=123.45.102.181 #NEW
+gkk2d23	ansible_host=123.45.102.182 #NEW
+gkk2d24	ansible_host=123.45.102.183 #NEW
+gkk2d25	ansible_host=123.45.102.184 #NEW
+gww6p8	ansible_host=123.55.20.107 #NEW
+gww6up3	ansible_host=123.55.20.105 #NEW
+gww6up4	ansible_host=123.55.20.106 #NEW
+gww6d9	ansible_host=123.55.20.108 #NEW
+gww6d10	ansible_host=123.55.20.109 #NEW

@@ -1,0 +1,25 @@
+- name: Install package from master
+  hosts: gww5up7
+  gather_facts: false
+
+  vars:
+    pkg: perccli-007.2313.0000.0000-1.noarch.rpm
+    source: /mnt/c/Users/user/Desktop/main/Software/
+    destination: /root/
+
+  tasks:
+    - name: Copying the Directory's contents (sub directories/files)
+      become: true 
+      copy:
+        src: "{{ source }}/{{ pkg }}"
+        dest: "{{ destination }}"
+        owner: root
+        group: root        
+        mode: 0644
+
+    - name: Install copied package
+      # become: true
+      dnf:
+        name: "{{ destination }}/{{ pkg }}"
+        disable_gpg_check: true
+        state: latest

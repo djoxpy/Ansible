@@ -1,0 +1,4 @@
+---
+# defaults file for install_pkg_from_master
+destination: /root/
+pkg: perccli-007.2313.0000.0000-1.noarch.rpm

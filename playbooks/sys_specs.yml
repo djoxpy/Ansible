@@ -1,0 +1,129 @@
+- name: Get info about the system
+  hosts: gpp4d14
+  gather_facts: true
+
+  vars:
+    headers: Hostname; MGMT IP address; CPU; SPECS; RAM; DISK
+    csv_path: /home/rocky8/sys_specs.csv
+    xlsx_path: /home/rocky8/sys_specs.xlsx
+    py_file: /home/rocky8/csv_to_xlsx.py
+
+  tasks:
+    - name: CPU model
+      shell: lscpu | grep -w '^Model name:' | awk '{for(i=3;i<=NF;i++) printf $i" "; print ""}'
+      register: processor_model
+
+    - name: CPU MHz
+      shell: "dmidecode -t processor | grep 'Current Speed:' | awk 'NR==1{print $3}'"
+      register: processor_mhz
+
+    - set_fact:
+        # processor: "{{ ansible_processor_threads_per_core }}x{{ ansible_processor_cores }}x{{ ansible_processor_count }} | model: {{ processor_model.stdout }} | Freq: {{ processor_mhz.stdout }} MHz"
+        processor: "{{ ansible_processor_threads_per_core }},{{ ansible_processor_cores }},{{ ansible_processor_count }}"
+
+
+    - name: RAM unit size
+      shell: lshw -short -c memory | grep -i dimm | grep -i -v empty | awk 'NR==1{print $3+0}'
+      # shell: "free -g | grep Mem: | awk 'NR==1{print $2}'"
+      register: memory_unit_size
+
+    - name: RAM unit count
+      shell: lshw -short -c memory | grep -i dimm | grep -i -v empty | wc -l
+      register: memory_unit_count
+
+    - name: RAM type
+      shell: "dmidecode -t 17 | grep Type: | awk 'NR==1{print $2}'"
+      register: memory_type
+    
+    - name: RAM speed
+      shell: "dmidecode -t 17 | grep Speed: | awk 'NR==1{print $2}'"
+      register: memory_speed
+
+    - set_fact:
+        ram: "{{ memory_unit_size.stdout | int * memory_unit_count.stdout | int }}"
+
+
+    # - name: Get disk (sda) information
+    #   ansible.builtin.shell: lsblk | grep sda | awk 'NR==1{print $4}'
+    #   register: disk_info_sda
+
+    # - name: Get disk (sdb) information
+    #   ansible.builtin.shell: lsblk | grep sdb | awk 'NR==1{print $4}'
+    #   register: disk_info_sdb     
+
+    # - set_fact:
+    #     disks: "{{ disk_info_sdb.stdout }},{{ disk_info_sda.stdout }}"
+      
+
+    - set_fact:
+        specs: "{{ ansible_processor_threads_per_core }}x{{ ansible_processor_cores }}x{{ ansible_processor_count }}@{{ processor_mhz.stdout | float / 1000 }}GHz,{{ ram }}G,{{ disk_info_sda.stdout }}"
+
+
+
+
+    - name: Get RAID level info
+      shell: /opt/MegaRAID/perccli/perccli64 /call/vall show | grep RAID | awk '{print $2}' | sort | grep -o '[0-9]'
+      register: raid_level
+
+    - name: Get SSD amount
+      shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "SSD" | wc -l
+      register: ssd_amount
+
+    - name: Get SSD size
+      shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "SSD" | awk '{print $5, $6}' | uniq
+      register: ssd_size
+
+    - name: Get HDD amount
+      shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "HDD" | wc -l
+      register: hdd_amount
+
+    - name: Get SSD size
+      shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "HDD" | awk '{print $5, $6}' | uniq
+      register: hdd_size
+
+    - name: Get serial number of HDD
+      shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "HDD" | awk '{print $12}' | uniq
+      register: hdd_serial
+
+    - name: Get serial number of SSD
+      shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "SSD" | awk '{print $12}' | uniq
+      register: ssd_serial
+
+    - set_fact:
+    #     disks: "{{ disk_info_sdb.stdout }},{{ disk_info_sda.stdout }}"
+
+
+
+
+    - name: Save CSV headers
+      ansible.builtin.lineinfile:
+        dest: "{{ csv_path }}"
+        line: "{{ headers }}"
+        create: true
+        state: present
+      delegate_to: localhost
+      run_once: true
+
+    - name: Build out CSV file
+      ansible.builtin.lineinfile:
+        dest: "{{ csv_path }}"
+        line: "{{ ansible_hostname }};{{ ansible_default_ipv4.address }};{{ processor_model.stdout }};{{ specs }};{{ ram }}GB ({{ memory_unit_count.stdout }}x{{ memory_unit_size.stdout }}GB) {{ memory_type.stdout }} {{ memory_speed.stdout }} MHz;{{ disks }}"
+        create: true
+        state: present
+      delegate_to: localhost
+
+      # RAID 1+6 / SSD 2x446.63GB / HDD 17x2235GB
+
+    - name: CSV to XLSX
+      shell: 
+        cmd: "python3 {{ py_file }} {{ csv_path }} {{ xlsx_path }}"
+        creates: "{{ xlsx_path }}"
+      delegate_to: localhost
+      run_once: true
+
+    - name: Remove CSV file
+      file:
+        path: "{{ csv_path }}"
+        state: absent
+      delegate_to: localhost
+      run_once: true

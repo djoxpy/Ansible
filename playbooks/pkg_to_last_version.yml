@@ -1,0 +1,11 @@
+- name: Install/update package to the latest version
+  hosts: gww1 gww5 gww6 gkk1 gkk2 gpp2 gpp4
+
+  vars:
+    pkg_name: "zabbix-agent"
+
+  tasks:
+    - name: "Install the latest version of {{ pkg_name }}"
+      yum:
+        name: "{{ pkg_name }}"
+        state: latest

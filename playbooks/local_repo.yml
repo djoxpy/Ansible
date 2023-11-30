@@ -1,0 +1,13 @@
+- name: Switch to local repo
+  hosts: gkk2up3
+  
+  tasks:
+    - name: Copy to /opt/tmp & chmod +x
+      copy: src=/home/user/local_repo.sh dest=/opt/tmp mode=a+x
+      
+    - name: Execute local_repo.sh
+      shell: /opt/tmp/local_repo.sh
+      
+    - name: Remove /etc/environment
+      file: path=/etc/environment state=absent
+      

@@ -1,0 +1,76 @@
+- name: Test HDDs via bonnie++
+  hosts: gww1
+  gather_facts: true
+
+  vars:
+    file_collect_dest: "/mnt/c/Users/user/Desktop/bonnie++/bonnie++.txt"
+    file_parse_dest: "/mnt/c/Users/user/Desktop/bonnie++/bonnie++.html"
+    folder: "/opt/benchmark/"
+    user: "user-main"
+  
+  tasks:
+    - name: Create folder for tests
+      ansible.builtin.file:
+        path: '{{ folder }}'
+        state: directory
+        mode: '0755'
+        owner: '{{ user }}'
+        group: '{{ user }}'
+      tags:
+        - collect
+        - parse
+
+    - name: Start bonnie++ | {{ folder }}
+      shell: bonnie++ -d "{{ folder }}" -s "{{ ansible_memtotal_mb | int * 2 }}" -m $HOSTNAME -u "{{ user }}" -q
+      # shell: bonnie++ -d "{{ folder }}" -s 128m -r 64m -m $HOSTNAME -u "{{ user }}" -q
+      register: results
+      async: 14400
+      poll: 180
+      tags:
+        - collect
+        - parse
+
+    - name: Save results to file on slave
+      shell: echo "{{ results.stdout }}" >> "{{ folder }}/$HOSTNAME.txt"
+      tags:
+        - collect
+
+    - name: Create local file
+      local_action: 
+        module: file
+        path: "{{ file_collect_dest }}"
+        state: touch
+      run_once: true
+      tags:
+        - collect
+        - parse
+
+    - name: Save output to local file
+      local_action:
+        module: lineinfile
+        line: "{{ results.stdout }}"
+        path: "{{ file_collect_dest }}"
+      tags:
+        - collect
+
+    - name: Parse output to html
+      local_action:
+        module: shell 
+        cmd: echo "{{ results.stdout }}" | bon_csv2html >> "{{ file_parse_dest }}"
+      tags:
+        - parse
+
+    # - name: Convert txt to html
+    #   local_action:
+    #     module: shell
+    #     cmd: cat "{{ file_collect_dest }}" | bon_csv2html >> "{{ file_parse_dest }}"
+    #   run_once: true
+    #   tags:
+    #     - convert
+
+    # - name: Clear {{ folder }} from slaves
+    #   ansible.builtin.file:
+    #     path: '{{ folder }}'
+    #     state: absent
+    #   tags:
+    #     - remove

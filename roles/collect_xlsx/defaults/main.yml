@@ -1,0 +1,6 @@
+---
+# defaults file for collect_xlsx
+headers: Hostname; MGMT IP address; CPU; SPECS; RAM; DISK
+csv_path: /home/rocky8/sys_specs.csv
+xlsx_path: /home/rocky8/sys_specs.xlsx
+py_file: /home/rocky8/csv_to_xlsx.py

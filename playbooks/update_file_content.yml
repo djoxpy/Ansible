@@ -1,0 +1,21 @@
+- name:  CHANGE FILE CONTENT
+  hosts: new
+  gather_facts: false
+
+  tasks:
+
+    # - name: Remove file
+    #   file:
+    #     state: absent
+    #     dest: /etc/yum.repos.d/centos7-local.repo
+
+    # - name: Create file
+    #   file:
+    #     state: touch
+    #     dest: /etc/yum.repos.d/centos7-local.repo
+
+    - name: Insert text in the file
+      lineinfile:
+        line: "\n[local-zabbix]\nname=Local Rocky8 Zabbix\nbaseurl=http://123.45.56.78/repos/rocky-linux-8/zabbix/\nenabled=1\ngpgcheck=0"
+        path: /etc/yum.repos.d/rocky8-local.repo
+        

@@ -1,0 +1,17 @@
+---
+# tasks file for install_pkg_from_master
+- name: Copying the Directory's contents (sub directories/files)
+  become: true 
+  copy:
+    src: "{{ pkg }}"
+    dest: "{{ destination }}"
+    owner: root
+    group: root        
+    mode: 0644
+
+- name: Install copied package
+  # become: true
+  dnf:
+    name: "{{ destination }}/{{ pkg }}"
+    disable_gpg_check: true
+    state: latest

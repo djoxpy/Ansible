@@ -1,0 +1,6 @@
+- name: Apply db privilegies
+  hosts: gup
+
+  tasks:
+    - name: Apply db privilegies
+      shell: mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'123.45.%.%' IDENTIFIED BY 'user-main' ; FLUSH PRIVILEGES;"

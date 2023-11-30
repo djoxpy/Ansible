@@ -1,0 +1,50 @@
+---
+# tasks file for sys_specs
+- name: CPU model
+  shell: lscpu | grep -w '^Model name:' | awk '{for(i=3;i<=NF;i++) printf $i" "; print ""}'
+  register: processor_model
+
+- name: CPU MHz
+  shell: "dmidecode -t processor | grep 'Current Speed:' | awk 'NR==1{print $3}'"
+  register: processor_mhz
+
+- set_fact:
+  # processor: "{{ ansible_processor_threads_per_core }}x{{ ansible_processor_cores }}x{{ ansible_processor_count }} | model: {{ processor_model.stdout }} | Freq: {{ processor_mhz.stdout }} MHz"
+  processor: "{{ ansible_processor_threads_per_core }},{{ ansible_processor_cores }},{{ ansible_processor_count }}"
+
+
+- name: RAM unit size
+  shell: lshw -short -c memory | grep -i dimm | grep -i -v empty | awk 'NR==1{print $3+0}'
+  # shell: "free -g | grep Mem: | awk 'NR==1{print $2}'"
+  register: memory_unit_size
+
+- name: RAM unit count
+  shell: lshw -short -c memory | grep -i dimm | grep -i -v empty | wc -l
+  register: memory_unit_count
+
+- name: RAM type
+  shell: "dmidecode -t 17 | grep Type: | awk 'NR==1{print $2}'"
+  register: memory_type
+    
+- name: RAM speed
+  shell: "dmidecode -t 17 | grep Speed: | awk 'NR==1{print $2}'"
+  register: memory_speed
+
+- set_fact:
+    ram: "{{ memory_unit_size.stdout | int * memory_unit_count.stdout | int }}"
+
+
+- name: Get disk (sda) information
+  ansible.builtin.shell: lsblk | grep sda | awk 'NR==1{print $4}'
+  register: disk_info_sda
+
+- name: Get disk (sdb) information
+  ansible.builtin.shell: lsblk | grep sdb | awk 'NR==1{print $4}'
+  register: disk_info_sdb     
+
+- set_fact:
+    disks: "{{ disk_info_sdb.stdout }},{{ disk_info_sda.stdout }}"
+      
+
+- set_fact:
+    specs: "{{ ansible_processor_threads_per_core }}x{{ ansible_processor_cores }}x{{ ansible_processor_count }}@{{ processor_mhz.stdout | float / 1000 }}GHz,{{ ram }}G,{{ disk_info_sda.stdout }}"

@@ -1,0 +1,38 @@
+- name:  CHECK PACKAGE VERSION
+  hosts: gww1 gww5 gww6 gkk1 gkk2 gpp2 gpp4
+  gather_facts: false
+
+  vars:
+    pkg_name: "zabbix-agent"
+    str_version: 
+      - 6.4.2
+    file_output_dest: "/mnt/c/Users/user/Desktop/zabbix-agent_status.txt"
+
+  tasks:
+
+    - name: Gather Installed Packages Facts
+      package_facts:
+        manager: "auto"
+
+    - name: "Found '{{ pkg_name }}' package"
+      set_fact:
+        version: "{{ ansible_facts.packages[pkg_name] | map(attribute='version') | first }}"
+      when: "pkg_name in ansible_facts.packages"
+
+    - name: "Installed '{{ pkg_name }}' version is {{ str_version }}"
+      debug:
+        msg: "OK"
+      when: version in str_version
+    
+    - name: Save output to a file
+      local_action:
+        module: lineinfile
+        line: "{{ inventory_hostname }} >>> {{ version }}"
+        path: "{{ file_output_dest }}"
+      loop: "{{ ansible_facts.packages[pkg_name] }}"
+      when: version not in str_version
+
+    - name: "Installed '{{ pkg_name }}' version is not {{ str_version }}"
+      debug:
+        msg: "{{ version }}"
+      when: version not in str_version

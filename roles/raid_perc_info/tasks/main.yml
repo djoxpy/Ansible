@@ -1,0 +1,36 @@
+---
+# tasks file for raid_perc_info
+- name: Get RAID level info
+  shell: /opt/MegaRAID/perccli/perccli64 /call/vall show | grep RAID | awk '{print $2}' | sort | grep -o '[0-9]'
+  register: raid_level
+
+- name: Get SSD amount
+  shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "SSD" | wc -l
+  register: ssd_amount
+
+- name: Get SSD size
+  shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "SSD" | awk '{print $5, $6}' | uniq
+  register: ssd_size
+
+- name: Get HDD amount
+  shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "HDD" | wc -l
+  register: hdd_amount
+
+- name: Get SSD size
+  shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "HDD" | awk '{print $5, $6}' | uniq
+  register: hdd_size
+
+- name: Get serial number of HDD
+  shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "HDD" | awk '{print $12}' | uniq
+  register: hdd_serial
+
+- name: Get serial number of SSD
+  shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "SSD" | awk '{print $12}' | uniq
+  register: ssd_serial
+
+- set_fact:
+    disks_det: "SSD: {{ ssd_serial.stdout }} / HDD: {{ hdd_serial.stdout }}"
+
+- set_fact:
+    disks: "RAID {{ raid_level.stdout_lines[0] }}+{{ raid_level.stdout_lines[1] }} / SSD {{ ssd_amount.stdout }}x{{ ssd_size.stdout }} / HDD {{ hdd_amount.stdout }}x{{ hdd_size.stdout }}"
+

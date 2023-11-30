@@ -1,0 +1,11 @@
+- name: -123.45.6.70 / +123.55.34.80
+  hosts: gpp4
+
+  tasks:
+    - name: Execute 'sed' command
+      shell: sed -i 's/^server 123.45.6.70 .*$/server 123.55.34.80 iburst/' /etc/ntp.conf
+
+    - name: restart ntpd
+      service:
+        name: ntpd
+        state: restarted

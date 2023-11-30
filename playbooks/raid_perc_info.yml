@@ -1,0 +1,54 @@
+- name: Get info about RAID
+  hosts: gpp4d14
+  gather_facts: false
+
+  tasks:
+
+    - name: Get RAID level info
+      shell: /opt/MegaRAID/perccli/perccli64 /call/vall show | grep RAID | awk '{print $2}' | sort | grep -o '[0-9]'
+      register: raid_level
+
+    - debug:
+        var: raid_level.stdout_lines.1
+
+    - name: Get SSD amount
+      shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "SSD" | wc -l
+      register: ssd_amount
+
+    - debug:
+        var: ssd_amount.stdout
+
+    - name: Get SSD size
+      shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "SSD" | awk '{print $5, $6}' | uniq
+      register: ssd_size
+
+    - debug: 
+        var: ssd_size.stdout
+
+    - name: Get HDD amount
+      shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "HDD" | wc -l
+      register: hdd_amount
+
+    - debug:
+        var: hdd_amount.stdout
+
+    - name: Get SSD size
+      shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "HDD" | awk '{print $5, $6}' | uniq
+      register: hdd_size
+
+    - debug: 
+        var: hdd_size.stdout
+
+    - name: Get serial number of HDD
+      shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "HDD" | awk '{print $12}' | uniq
+      register: hdd_serial
+
+    - debug: 
+        var: hdd_serial.stdout
+
+    - name: Get serial number of SSD
+      shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "SSD" | awk '{print $12}' | uniq
+      register: ssd_serial
+
+    - debug: 
+        var: ssd_serial.stdout

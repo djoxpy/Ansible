@@ -1,0 +1,35 @@
+- name: Update zabbix_proc
+  hosts: new
+  gather_facts: false
+  
+  tasks:
+    # - name: Copy to /etc/zabbix
+    #   synchronize: src=/mnt/c/Users/user/Desktop/main/Zabbix/zabbix_proc_app/ dest=/etc/zabbix owner=false group=false rsync_path="sudo rsync" recursive=true
+    - name: chown
+      file: path=/etc/zabbix/ mode=755 owner=root group=root recurse=yes
+
+    - name: chmod +x
+      file: path=/etc/zabbix/zabbix_proc.sh mode=a+x owner=zabbix group=zabbix 
+
+    - name: chown
+      file: path=/etc/zabbix/zabbix_agentd.d/ mode=644 owner=root group=root recurse=yes
+
+    - name: chown
+      file: path=/etc/zabbix/zabbix_agentd.d/ mode=755 owner=root group=root
+
+    - name: Reload service
+      service:
+        name: zabbix-agent
+        state: restarted
+      
+    #- name: Execute zabbix_proc.sh
+    #  command: /etc/zabbix/zabbix_proc.sh --allow
+
+    # - name: Start zabbix.sh
+    #   shell: /opt/scripts/zabbix.sh 123.45.56.70/26
+    #   become: true
+    #   become_user: root
+
+
+
+    

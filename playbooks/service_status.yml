@@ -1,0 +1,27 @@
+- name: "Check service status"
+  hosts: gww1 gww5 gww6 gkk1 gkk2 gpp2 gpp4 gup
+  gather_facts: false
+
+  vars:
+    service_name: "zabbix-agent.service"
+    state: "running"
+  
+  tasks:
+    - name: get service facts
+      ansible.builtin.service_facts:
+
+    - name: extract service state
+      set_fact:
+        service_state: "{{ ansible_facts.services[service_name].state }}"
+
+    - name: display {{ service_name }} is {{ state }}
+      debug:
+        var: service_state
+      when: service_state == state
+
+    - name: display {{ service_name }} is not {{ state }}
+      debug:
+        var: service_state
+      when: service_state != state
+
+    

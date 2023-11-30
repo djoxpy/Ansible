@@ -1,0 +1,13 @@
+- name:  Version of OS
+  hosts: new
+
+  vars: 
+    file_output_dest: /mnt/c/Users/user/Desktop/rocky_version.txt
+
+  tasks:
+    
+    - name: Write to file
+      local_action:
+        module: lineinfile
+        line: "{{ inventory_hostname }} >>> {{ ansible_distribution_version }}"
+        path: "{{ file_output_dest }}"
