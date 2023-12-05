@@ -12,7 +12,7 @@
 - name: Build out CSV file
   ansible.builtin.lineinfile:
     dest: "{{ csv_path }}"
-    line: "{{ ansible_hostname }};{{ ansible_default_ipv4.address }};{{ processor_model.stdout }};{{ specs }};{{ ram }}GB ({{ memory_unit_count.stdout }}x{{ memory_unit_size.stdout }}GB) {{ memory_type.stdout }} {{ memory_speed.stdout }} MHz;{{ disks }}"
+    line: "{{ ansible_hostname }};{{ ansible_default_ipv4.address }};{{ processor_model.stdout }};{{ specs }};{{ ram }}GB ({{ memory_unit_count.stdout }}x{{ memory_unit_size.stdout }}GB) {{ memory_type.stdout }} {{ memory_speed.stdout }} MHz;{{ disks }};{{ disks_det }}"
     create: true
     state: present
   delegate_to: localhost
@@ -20,7 +20,7 @@
 - name: CSV to XLSX
   shell: 
     cmd: "python3 {{ py_file }} {{ csv_path }} {{ xlsx_path }}"
-    creates: "{{ xlsx_path }}"
+    #creates: "{{ xlsx_path }}"
   delegate_to: localhost
   run_once: true
 

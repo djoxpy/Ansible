@@ -1,6 +1,6 @@
 ---
 # defaults file for collect_xlsx
-headers: Hostname; MGMT IP address; CPU; SPECS; RAM; DISK
-csv_path: /home/rocky8/sys_specs.csv
-xlsx_path: /home/rocky8/sys_specs.xlsx
-py_file: /home/rocky8/csv_to_xlsx.py
+headers: Hostname; MGMT IP address; CPU; SPECS; RAM; DISK; DISK DETAILS
+csv_path: /home/user/sys_specs.csv
+xlsx_path: /mnt/c/Users/user/Desktop/sys_specs.xlsx
+py_file: /mnt/c/Users/user/Desktop/main/Ansible/roles/collect_xlsx/files/csv_to_xlsx.py
