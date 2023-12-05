@@ -9,8 +9,8 @@
   register: processor_mhz
 
 - set_fact:
-  # processor: "{{ ansible_processor_threads_per_core }}x{{ ansible_processor_cores }}x{{ ansible_processor_count }} | model: {{ processor_model.stdout }} | Freq: {{ processor_mhz.stdout }} MHz"
-  processor: "{{ ansible_processor_threads_per_core }},{{ ansible_processor_cores }},{{ ansible_processor_count }}"
+    # processor: "{{ ansible_processor_threads_per_core }}x{{ ansible_processor_cores }}x{{ ansible_processor_count }} | model: {{ processor_model.stdout }} | Freq: {{ processor_mhz.stdout }} MHz"
+    processor: "{{ ansible_processor_threads_per_core }},{{ ansible_processor_cores }},{{ ansible_processor_count }}"
 
 
 - name: RAM unit size
@@ -42,8 +42,8 @@
   ansible.builtin.shell: lsblk | grep sdb | awk 'NR==1{print $4}'
   register: disk_info_sdb     
 
-- set_fact:
-    disks: "{{ disk_info_sdb.stdout }},{{ disk_info_sda.stdout }}"
+    # - set_fact:
+    #     disks: "{{ disk_info_sdb.stdout }},{{ disk_info_sda.stdout }}"
       
 
 - set_fact:

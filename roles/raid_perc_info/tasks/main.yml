@@ -33,4 +33,3 @@
 
 - set_fact:
     disks: "RAID {{ raid_level.stdout_lines[0] }}+{{ raid_level.stdout_lines[1] }} / SSD {{ ssd_amount.stdout }}x{{ ssd_size.stdout }} / HDD {{ hdd_amount.stdout }}x{{ hdd_size.stdout }}"
-
