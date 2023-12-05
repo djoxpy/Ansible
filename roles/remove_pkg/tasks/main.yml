@@ -1,0 +1,18 @@
+---
+# tasks file for remove_pkg
+- name: "Remove the '{{ pkg_name }}'"
+  dnf:
+    name: "{{ pkg_name }}"
+    state: absent
+
+- name: Recursively remove directory
+  ansible.builtin.file:
+    path: "{{ del_dir }}"
+    state: absent
+
+- name: Remove file (delete file)
+  ansible.builtin.file:
+    path: "{{ del_file }}"
+    state: absent
+
+    

@@ -1,0 +1,5 @@
+---
+# defaults file for remove_pkg
+pkg_name: "perccli-007.2313.0000.0000-1"
+del_dir: "/opt/MegaRAID"
+del_file: "/root/perccli-007.2313.0000.0000-1.noarch.rpm"
