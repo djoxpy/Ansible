@@ -1,0 +1,8 @@
+---
+- hosts: new
+  roles: 
+    - install_pkg_from_master
+    - sys_specs
+    - raid_perc_info
+    - collect_xlsx
+    - remove_pkg
