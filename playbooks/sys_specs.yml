@@ -3,7 +3,7 @@
   gather_facts: true
 
   vars:
-    headers: Hostname; MGMT IP address; CPU; SPECS; RAM; DISK
+    headers: Hostname; MGMT IP address; CPU; SPECS; RAM; DISK; DISK DETAILS
     csv_path: /home/rocky8/sys_specs.csv
     xlsx_path: /home/rocky8/sys_specs.xlsx
     py_file: /home/rocky8/csv_to_xlsx.py
@@ -43,13 +43,13 @@
         ram: "{{ memory_unit_size.stdout | int * memory_unit_count.stdout | int }}"
 
 
-    # - name: Get disk (sda) information
-    #   ansible.builtin.shell: lsblk | grep sda | awk 'NR==1{print $4}'
-    #   register: disk_info_sda
+    - name: Get disk (sda) information
+      ansible.builtin.shell: lsblk | grep sda | awk 'NR==1{print $4}'
+      register: disk_info_sda
 
-    # - name: Get disk (sdb) information
-    #   ansible.builtin.shell: lsblk | grep sdb | awk 'NR==1{print $4}'
-    #   register: disk_info_sdb     
+    - name: Get disk (sdb) information
+      ansible.builtin.shell: lsblk | grep sdb | awk 'NR==1{print $4}'
+      register: disk_info_sdb     
 
     # - set_fact:
     #     disks: "{{ disk_info_sdb.stdout }},{{ disk_info_sda.stdout }}"
@@ -77,7 +77,7 @@
       shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "HDD" | wc -l
       register: hdd_amount
 
-    - name: Get SSD size
+    - name: Get HDD size
       shell: /opt/MegaRAID/perccli/perccli64 /call/eall/sall show | grep "HDD" | awk '{print $5, $6}' | uniq
       register: hdd_size
 
@@ -90,7 +90,10 @@
       register: ssd_serial
 
     - set_fact:
-    #     disks: "{{ disk_info_sdb.stdout }},{{ disk_info_sda.stdout }}"
+        disks_det: "SSD: {{ ssd_serial.stdout }} / HDD: {{ hdd_serial.stdout }}"
+
+    - set_fact:
+        disks: "RAID {{ raid_level.stdout_lines[0] }}+{{ raid_level.stdout_lines[1] }} / SSD {{ ssd_amount.stdout }}x{{ ssd_size.stdout }} / HDD {{ hdd_amount.stdout }}x{{ hdd_size.stdout }}"
 
 
 
@@ -107,7 +110,7 @@
     - name: Build out CSV file
       ansible.builtin.lineinfile:
         dest: "{{ csv_path }}"
-        line: "{{ ansible_hostname }};{{ ansible_default_ipv4.address }};{{ processor_model.stdout }};{{ specs }};{{ ram }}GB ({{ memory_unit_count.stdout }}x{{ memory_unit_size.stdout }}GB) {{ memory_type.stdout }} {{ memory_speed.stdout }} MHz;{{ disks }}"
+        line: "{{ ansible_hostname }};{{ ansible_default_ipv4.address }};{{ processor_model.stdout }};{{ specs }};{{ ram }}GB ({{ memory_unit_count.stdout }}x{{ memory_unit_size.stdout }}GB) {{ memory_type.stdout }} {{ memory_speed.stdout }} MHz;{{ disks }}; {{ disks_det }}"
         create: true
         state: present
       delegate_to: localhost

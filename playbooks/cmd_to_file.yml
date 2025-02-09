@@ -1,0 +1,29 @@
+- name:  EXECUTE CMD AND SAVE TO FILE
+  hosts: gpp4_db
+  # hosts: waw5d7
+  # hosts: ch
+  gather_facts: true
+
+  vars:
+    cmd: clickhouse-client -q "SELECT query_start_time,event_time,query FROM system.query_log WHERE type = 'QueryFinish' and initial_user = 'nscan@172.16.48.57' and query_start_time between '2024-12-01 00:00:00' and '2024-12-18 14:20:31' AND dateDiff('second', query_start_time, event_time) > 15 ORDER BY query_start_time ASC LIMIT 500" -f CSV
+    file_output_dest: "/home/rocky8/ds_test/data/all"
+
+  tasks:
+    - name: CMD
+      shell: "{{ cmd }}"
+      register: cmd_output
+
+    # - debug: msg="{{ cmd_output.stdout_lines }}"
+
+    - name: Create local file
+      local_action: 
+        module: file
+        path: "{{ file_output_dest }}/{{ ansible_hostname }}.txt"
+        state: touch
+      run_once: false
+
+    - name: Save output to local file
+      local_action:
+        module: lineinfile
+        line: "{{ cmd_output.stdout }}\n"
+        path: "{{ file_output_dest }}/{{ ansible_hostname }}.txt"

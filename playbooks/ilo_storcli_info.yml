@@ -1,0 +1,56 @@
+- name: Get info about RAID
+  hosts: gww5_p
+  gather_facts: true
+
+  vars:
+    headers: Hostname; MGMT IP address; RAID Level
+    csv_path: /home/rocky8/sys_specs.csv
+    xlsx_path: /home/rocky8/sys_specs.xlsx
+    py_file: /home/rocky8/csv_to_xlsx.py
+
+  tasks:    
+    
+    ###   iLO
+    - name: Get RAID level info
+      shell: ssacli ctrl slot=0 ld all show status | awk 'NR==2,NR==3{print $5,$6}' | cut -d ':' -f 1 | cut -d ')' -f 1
+      register: raid_level
+
+    ###   iDRAC
+    # - name: Get RAID level info
+    #   shell: /opt/MegaRAID/perccli/perccli64 /call/vall show | grep RAID | awk '{print $2}' | sort
+    #   register: raid_level  
+
+    # - set_fact:
+    #     raid_level: "{{ raid_level.stdout_lines[0] }} / {{ raid_level.stdout_lines[1] }}"
+
+
+    - name: Save CSV headers
+      ansible.builtin.lineinfile:
+        dest: "{{ csv_path }}"
+        line: "{{ headers }}"
+        create: true
+        state: present
+      delegate_to: localhost
+      run_once: true
+
+    - name: Build out CSV file
+      ansible.builtin.lineinfile:
+        dest: "{{ csv_path }}"
+        line: "{{ ansible_hostname }};{{ ansible_default_ipv4.address }};{{ raid_level }}"
+        create: true
+        state: present
+      delegate_to: localhost
+
+    - name: CSV to XLSX
+      shell: 
+        cmd: "python3 {{ py_file }} {{ csv_path }} {{ xlsx_path }}"
+        creates: "{{ xlsx_path }}"
+      delegate_to: localhost
+      run_once: true
+
+    - name: Remove CSV file
+      file:
+        path: "{{ csv_path }}"
+        state: absent
+      delegate_to: localhost
+      run_once: true

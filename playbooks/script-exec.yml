@@ -1,0 +1,21 @@
+- name: Copy and exec script
+  hosts: gpp2
+  gather_facts: false
+
+  vars:
+    script_name: "clickhouse_config.sh"
+    script_params: "nscan 172.%.%.%"
+
+  
+  tasks:
+
+    - name: Copy {{ script_name }} script
+      copy: 
+        src: /mnt/c/Users/johnn/Desktop/NetQPro/nssys_git/rocky8/{{ script_name }}
+        dest: /opt/scripts/
+        owner: root
+        group: root        
+        mode: 0755
+
+    - name: Execute zabbix.sh
+      shell: /opt/scripts/{{ script_name }} {{ script_params }}

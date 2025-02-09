@@ -1,11 +1,41 @@
 - name: Install/update package to the latest version
-  hosts: gww1 gww5 gww6 gkk1 gkk2 gpp2 gpp4
+  hosts: gup
+  gather_facts: true
+  # become: true
 
   vars:
     pkg_name: "zabbix-agent"
-
+  
   tasks:
+  
+    - name: "Add Zabbix repo"
+      ansible.builtin.blockinfile:
+        path: /etc/yum.repos.d/rocky8-local.repo
+        block: |
+          [local-zabbix]
+          name=Local Rocky8 Zabbix
+          baseurl=http://172.16.48.59/repos/rocky-linux-8/zabbix/
+          gpgcheck=0
+          enabled=1
+        # marker: ""
+        # append_newline: false
+
+    - name: "Erase old version of {{ pkg_name }}"
+      shell: dnf remove {{ pkg_name }} -y
+
     - name: "Install the latest version of {{ pkg_name }}"
-      yum:
+      dnf:
         name: "{{ pkg_name }}"
         state: latest
+
+    - name: Copy zabbix.sh script
+      copy: 
+        src: /mnt/c/Users/johnn/Desktop/NetQPro/nssys_git/rocky8/zabbix.sh
+        dest: /opt/scripts/
+        owner: root
+        group: root        
+        mode: 0755
+
+    - name: Execute zabbix.sh
+      shell: /opt/scripts/zabbix.sh 172.16.48.59/26
+    

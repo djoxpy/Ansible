@@ -1,9 +1,9 @@
 - name: Get info about RAID
-  hosts: gpp4d14
+  hosts: gww5d19
   gather_facts: false
 
   tasks:
-
+  
     - name: Get RAID level info
       shell: /opt/MegaRAID/perccli/perccli64 /call/vall show | grep RAID | awk '{print $2}' | sort | grep -o '[0-9]'
       register: raid_level
@@ -52,3 +52,5 @@
 
     - debug: 
         var: ssd_serial.stdout
+
+    

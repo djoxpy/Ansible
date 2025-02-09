@@ -1,12 +1,13 @@
 - name: Test HDDs via bonnie++
-  hosts: gww1
+  hosts: localhost
   gather_facts: true
 
   vars:
-    file_collect_dest: "/mnt/c/Users/user/Desktop/bonnie++/bonnie++.txt"
-    file_parse_dest: "/mnt/c/Users/user/Desktop/bonnie++/bonnie++.html"
+    # IT MUST BE "Desktop/bonnie++""
+    file_collect_dest: "/mnt/c/Users/johnn/Desktop/NetQPro/nssys_git/bonnie.csv"
+    file_parse_dest: "/mnt/c/Users/johnn/Desktop/bonnie++/bonnie++.html"
     folder: "/opt/benchmark/"
-    user: "user-main"
+    user: "netscan"
   
   tasks:
     - name: Create folder for tests
@@ -21,7 +22,9 @@
         - parse
 
     - name: Start bonnie++ | {{ folder }}
-      shell: bonnie++ -d "{{ folder }}" -s "{{ ansible_memtotal_mb | int * 2 }}" -m $HOSTNAME -u "{{ user }}" -q
+      #With parameter "-n"
+      shell: bonnie++ -d "{{ folder }}" -s "{{ ansible_memtotal_mb | int * 2 }}" -m $HOSTNAME -u "{{ user }}" -n -q
+      #shell: bonnie++ -d "{{ folder }}" -s "{{ ansible_memtotal_mb | int * 2 }}" -m $HOSTNAME -u "{{ user }}" -q
       # shell: bonnie++ -d "{{ folder }}" -s 128m -r 64m -m $HOSTNAME -u "{{ user }}" -q
       register: results
       async: 14400

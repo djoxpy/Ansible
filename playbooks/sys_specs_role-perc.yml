@@ -1,5 +1,5 @@
 ---
-- hosts: new
+- hosts: gww5g1
   roles: 
     - install_pkg_from_master
     - sys_specs
